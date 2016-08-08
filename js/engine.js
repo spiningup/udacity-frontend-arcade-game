@@ -80,9 +80,25 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
+        checkWinning();
     }
 
+    function checkCollisions() {
+        allEnemies.forEach(function(enemy) {
+          var x = Math.abs(enemy.x - player.x);
+          var y = Math.abs(enemy.y - player.y);
+          if ( (x < xstep / 2) && (y < ystep / 2) ) {
+            reset();
+          }
+        });
+    }
+
+    function checkWinning() {
+        if ( player.y < 0) {
+          reset();
+        }
+    }
     /* This is called by the update function and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
@@ -94,7 +110,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+        player.update(0, 0);
     }
 
     /* This function initially draws the "game level", it will then call
@@ -160,6 +176,8 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
+        player.x = xstep * 2;
+        player.y = ystep * 5 - 10;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
