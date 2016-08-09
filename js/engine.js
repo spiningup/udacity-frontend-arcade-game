@@ -176,8 +176,8 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
-        player.x = xstep * 2;
-        player.y = ystep * 5 - 10;
+        resetEnemies();
+        player.reset();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
