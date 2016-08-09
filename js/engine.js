@@ -89,6 +89,7 @@ var Engine = (function(global) {
           var x = Math.abs(enemy.x - player.x);
           var y = Math.abs(enemy.y - player.y);
           if ( (x < xstep / 2) && (y < ystep / 2) ) {
+            score.update(-score.num);
             reset();
           }
         });
@@ -96,7 +97,8 @@ var Engine = (function(global) {
 
     function checkWinning() {
         if ( player.y < 0) {
-          reset();
+            score.update(100);
+            reset();
         }
     }
     /* This is called by the update function and loops through all of the
@@ -168,6 +170,8 @@ var Engine = (function(global) {
         });
 
         player.render();
+
+        score.render();
     }
 
     /* This function does nothing but it could have been a good place to

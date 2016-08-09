@@ -85,11 +85,29 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+var Score = function() {
+    this.num = 0;
+    this.x = 10;
+    this.y = 30;
+};
+
+Score.prototype.update = function(num) {
+    this.num += num;
+};
+
+Score.prototype.render = function() {
+    ctx.fillStyle = 'red';
+    ctx.font = '30px Arial';
+    ctx.clearRect(0, 0, 200, 50);
+    ctx.fillText('Score : ' + this.num, this.x, this.y);
+};
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
 var player = new Player();
+var score = new Score();
 
 function resetEnemies() {
     allEnemies = [];
