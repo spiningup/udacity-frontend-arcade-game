@@ -90,7 +90,7 @@ var Engine = (function(global) {
             var y = Math.abs(obj.y - player.y);
             if ( (x < xstep / 2) && (y < ystep / 2) ) {
                 return true;
-            } else return false;
+            } else {return false}
         }
         allEnemies.forEach(function(enemy) {
           if ( isCollide(enemy) ) {
@@ -99,11 +99,16 @@ var Engine = (function(global) {
           }
         });
 
-        allGems.forEach(function(gem)) {
+        var idx = null;
+        allGems.forEach(function(gem, i) {
             if ( isCollide(gem) ) {
+                idx = i;
                 score.update(40);
             }
-        };
+        });
+        if (idx != null) {
+          allGems.splice(idx, 1);
+        }
     }
 
     function checkWinning() {
