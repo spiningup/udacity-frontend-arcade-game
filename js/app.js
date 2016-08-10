@@ -85,6 +85,21 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+var Gem = function() {
+    images = ['images/Gem-Blue.png', 'images/Gem-Green.png', 'images/Gem-Orange.png'];
+    this.sprite = images[getRandomInt(0, 3)];
+    this.reset();
+};
+
+Gem.prototype.reset = function() {
+    this.x = xstep * getRandomInt(0, 5);
+    this.y = ystep * getRandomInt(1, 4) - 20;
+};
+
+Gem.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
 var Score = function() {
     this.num = 0;
     this.x = 10;
@@ -106,14 +121,21 @@ Score.prototype.render = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
+var allGems = [];
 var player = new Player();
 var score = new Score();
 
-function resetEnemies() {
+function resetObjects() {
     allEnemies = [];
     for (var i = 0; i < getRandomInt(2, 6); i++) {
         enemy = new Enemy();
         allEnemies.push(enemy);
+    };
+
+    allGems = [];
+    for (var i = 0; i < getRandomInt(1, 4); i++) {
+        gem = new Gem();
+        allGems.push(gem);
     };
 }
 
