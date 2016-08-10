@@ -3,6 +3,13 @@ var xstep = 101,
     ystep = 83,
     vstep = 50;
 
+var playerImages = [
+  'images/char-boy.png',
+  'images/char-cat-girl.png',
+  'images/char-horn-girl.png',
+  'images/char-pink-girl.png',
+  'images/char-princess-girl.png'];
+
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -46,7 +53,8 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function() {
-    this.sprite = 'images/char-boy.png';
+    this.spriteidx = 0;
+    this.sprite = playerImages[this.spriteidx];
     this.reset();
 };
 
@@ -64,7 +72,12 @@ Player.prototype.handleInput = function(key) {
         this.update(0, -1);
     } else if (key == 'down') {
         this.update(0, 1);
-    } else {
+    } else if (key == 'enter') {
+        this.spriteidx += 1;
+        if (this.spriteidx > 4) {
+            this.spriteidx = 0
+        }
+        this.sprite = playerImages[this.spriteidx];
     }
 };
 
@@ -146,7 +159,8 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        13: 'enter'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);

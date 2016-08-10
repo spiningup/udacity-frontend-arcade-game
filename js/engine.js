@@ -21,7 +21,7 @@ var Engine = (function(global) {
      */
     var doc = global.document,
         win = global.window,
-        canvas = doc.createElement('canvas'),
+        canvas = document.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime;
 
@@ -170,6 +170,11 @@ var Engine = (function(global) {
             }
         }
 
+        ctx.fillStyle = 'red';
+        ctx.font = '20px Arial';
+        ctx.clearRect(200, 0, 400, 50);
+        ctx.fillText('Press "Enter" to change avatar', 225, 28);
+
         renderEntities();
     }
 
@@ -213,6 +218,10 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
         'images/Gem-Blue.png',
         'images/Gem-Green.png',
         'images/Gem-Orange.png'
