@@ -1,8 +1,11 @@
 // Enemies our player must avoid
+
+// Define the size of each block in terms of px and the speed unit.
 var xstep = 101,
     ystep = 83,
     vstep = 50;
 
+// Define playerImages and gemImages
 var playerImages = [
   'images/char-boy.png',
   'images/char-cat-girl.png',
@@ -10,12 +13,18 @@ var playerImages = [
   'images/char-pink-girl.png',
   'images/char-princess-girl.png'];
 
+var gemImages = ['images/Gem-Blue.png',
+                 'images/Gem-Green.png',
+                 'images/Gem-Orange.png'];
+
+// Function to generate random integer between min and max value
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+// Enemy class
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
@@ -38,6 +47,7 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
+// Reset enemy's position and speed in a random way
 Enemy.prototype.reset = function() {
     this.x = xstep * getRandomInt(0, 5);
     this.y = ystep * getRandomInt(1, 4) - 20;
@@ -52,17 +62,23 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+
+// Player class
 var Player = function() {
+    // spriteidx to keep track of the player avatar to display,
+    // by pressing 'enter' key, avatar will change
     this.spriteidx = 0;
     this.sprite = playerImages[this.spriteidx];
     this.reset();
 };
 
+// Reset player position upon winning or losing the game
 Player.prototype.reset = function() {
     this.x = xstep * getRandomInt(1, 4);
     this.y = ystep * 5 - 10;
 };
 
+// Handle keyboard input to move player
 Player.prototype.handleInput = function(key) {
     if (key === 'left') {
         this.update(-1, 0);
@@ -81,10 +97,12 @@ Player.prototype.handleInput = function(key) {
     }
 };
 
+// Update player position
 Player.prototype.update = function(dx, dy) {
     this.x += xstep * dx;
     this.y += ystep * dy;
 
+    // Make sure that player can't move beyond canvas
     if (this.x >= xstep * 5 || this.x < 0) {
       this.x -= xstep * dx;
     }
@@ -94,35 +112,41 @@ Player.prototype.update = function(dx, dy) {
     }
 };
 
+// Display player on canvas
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// Gem class
 var Gem = function() {
-    images = ['images/Gem-Blue.png', 'images/Gem-Green.png', 'images/Gem-Orange.png'];
-    this.sprite = images[getRandomInt(0, 3)];
+    this.sprite = gemImages[getRandomInt(0, 3)];
     this.reset();
 };
 
+// Reset gem positions randomly
 Gem.prototype.reset = function() {
     this.x = xstep * getRandomInt(0, 5);
     this.y = ystep * getRandomInt(1, 4) - 20;
 };
 
+// Display gem on canvas
 Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// Score class - display and update game score
 var Score = function() {
     this.num = 0;
     this.x = 10;
     this.y = 30;
 };
 
+// Update score
 Score.prototype.update = function(num) {
     this.num += num;
 };
 
+// Display score on canvas
 Score.prototype.render = function() {
     ctx.fillStyle = 'red';
     ctx.font = '30px Arial';
@@ -138,6 +162,7 @@ var allGems = [];
 var player = new Player();
 var score = new Score();
 
+// Generate random number of enemies and gems
 function resetObjects() {
     allEnemies = [];
     for (var i = 0; i < getRandomInt(2, 6); i++) {

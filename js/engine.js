@@ -84,6 +84,11 @@ var Engine = (function(global) {
         checkWinning();
     }
 
+    /* This function is called by update to check whether there are player-enemy
+     * and player-gem collision and update the game according to following rules.
+     * player-enemy collision: reset score to zero, and reset game
+     * player-gem collision: update score and remove the corresponding gem
+     */
     function checkCollisions() {
         function isCollide(obj) {
             var x = Math.abs(obj.x - player.x);
@@ -111,6 +116,9 @@ var Engine = (function(global) {
         }
     }
 
+    /* This function check whether the player wins the game.
+     * If winning, update score and reset game.
+     */
     function checkWinning() {
         if ( player.y < 0) {
             score.update(100);
@@ -203,8 +211,9 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        // reset the number of gem and enemies, and their locations and speed
         resetObjects();
+        // reset player position
         player.reset();
     }
 
