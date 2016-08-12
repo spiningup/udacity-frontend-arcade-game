@@ -93,7 +93,7 @@ var Engine = (function(global) {
         function isCollide(obj) {
             var x = Math.abs(obj.x - player.x);
             var y = Math.abs(obj.y - player.y);
-            if ( (x < xstep / 2) && (y < ystep / 2) ) {
+            if ( (x < XSTEP / 2) && (y < YSTEP / 2) ) {
                 return true;
             } else {return false}
         }
