@@ -1,9 +1,9 @@
-// Enemies our player must avoid
+"use strict";
 
 // Define the size of each block in terms of px and the speed unit.
-var xstep = 101,
-    ystep = 83,
-    vstep = 50;
+var XSTEP = 101,
+    YSTEP = 83,
+    VSTEP = 50;
 
 // Define playerImages and gemImages
 var playerImages = [
@@ -17,12 +17,25 @@ var gemImages = ['images/Gem-Blue.png',
                  'images/Gem-Green.png',
                  'images/Gem-Orange.png'];
 
-// Function to generate random integer between min and max value
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-}
+// Superclass for Enemy, Player and Gem
+var Obj = function() {
+};
+
+// Function to generate a random integer between min and max value
+Obj.prototype.getRandomInt = function(min, max) {
+    return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
+};
+
+// Function to reset locations
+Obj.prototype.reset = function() {
+    this.x = XSTEP * this.getRandomInt(0, 5);
+    this.y = YSTEP * this.getRandomInt(1, 4) - 20;
+};
+
+// Function to display image given x, y, and image src (this.sprite)
+Obj.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
 
 // Enemy class
 var Enemy = function() {
@@ -35,6 +48,10 @@ var Enemy = function() {
     this.reset();
 };
 
+// Enemy inherite Obj superclass
+Enemy.prototype = Object.create(Obj.prototype);
+Enemy.prototype.constructor = Enemy;
+
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
@@ -42,21 +59,16 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += this.speed * dt;
-    if (this.x > xstep * 5) {
+    if (this.x > XSTEP * 5) {
         this.x = 0;
     }
 };
 
 // Reset enemy's position and speed in a random way
 Enemy.prototype.reset = function() {
-    this.x = xstep * getRandomInt(0, 5);
-    this.y = ystep * getRandomInt(1, 4) - 20;
-    this.speed = vstep * getRandomInt(1, 5);
-};
-
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    this.x = XSTEP * this.getRandomInt(0, 5);
+    this.y = YSTEP * this.getRandomInt(1, 4) - 20;
+    this.speed = VSTEP * this.getRandomInt(1, 5);
 };
 
 // Now write your own player class
@@ -72,10 +84,14 @@ var Player = function() {
     this.reset();
 };
 
+// Player inherite Obj superclass
+Player.prototype = Object.create(Obj.prototype);
+Player.prototype.constructor = Player;
+
 // Reset player position upon winning or losing the game
 Player.prototype.reset = function() {
-    this.x = xstep * getRandomInt(1, 4);
-    this.y = ystep * 5 - 10;
+    this.x = XSTEP * this.getRandomInt(1, 4);
+    this.y = YSTEP * 5 - 10;
 };
 
 // Handle keyboard input to move player
@@ -99,40 +115,28 @@ Player.prototype.handleInput = function(key) {
 
 // Update player position
 Player.prototype.update = function(dx, dy) {
-    this.x += xstep * dx;
-    this.y += ystep * dy;
+    this.x += XSTEP * dx;
+    this.y += YSTEP * dy;
 
     // Make sure that player can't move beyond canvas
-    if (this.x >= xstep * 5 || this.x < 0) {
-      this.x -= xstep * dx;
+    if (this.x >= XSTEP * 5 || this.x < 0) {
+      this.x -= XSTEP * dx;
     }
 
-    if (this.y > ystep * 5) {
-      this.y -= ystep * dy;
+    if (this.y > YSTEP * 5) {
+      this.y -= YSTEP * dy;
     }
-};
-
-// Display player on canvas
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Gem class
 var Gem = function() {
-    this.sprite = gemImages[getRandomInt(0, 3)];
+    this.sprite = gemImages[this.getRandomInt(0, 3)];
     this.reset();
 };
 
-// Reset gem positions randomly
-Gem.prototype.reset = function() {
-    this.x = xstep * getRandomInt(0, 5);
-    this.y = ystep * getRandomInt(1, 4) - 20;
-};
-
-// Display gem on canvas
-Gem.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+// Gem inherite Obj superclass
+Gem.prototype = Object.create(Obj.prototype);
+Gem.prototype.constructor = Gem;
 
 // Score class - display and update game score
 var Score = function() {
@@ -164,15 +168,20 @@ var score = new Score();
 
 // Generate random number of enemies and gems
 function resetObjects() {
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
+    };
+
     allEnemies = [];
     for (var i = 0; i < getRandomInt(2, 6); i++) {
-        enemy = new Enemy();
+        var enemy = new Enemy();
         allEnemies.push(enemy);
     };
 
     allGems = [];
     for (var i = 0; i < getRandomInt(1, 4); i++) {
-        gem = new Gem();
+        var gem = new Gem();
         allGems.push(gem);
     };
 }
